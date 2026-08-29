@@ -1,0 +1,25 @@
+# vLLM 추론 서버 환경 (별도 venv: /workspace/venv-vllm)
+#
+# 왜 분리하는가: vLLM 0.28 은 torch 2.13 / transformers 5.x 를 요구하는데,
+# 학습 쪽은 torch 2.8 / transformers 4.x 에서 검증됐다. 한 환경에 못 담는다.
+# 추론(생성)은 전부 이 환경에서, 학습·조립은 시스템 python3 에서 돈다.
+#
+# 검증 환경: Python 3.12.3 / CUDA 13.0 / NVIDIA driver 580.126.20
+#
+# 설치:
+#   python3 -m venv /workspace/venv-vllm
+#   /workspace/venv-vllm/bin/pip install -r requirements-vllm.txt
+#
+# 서버 기동:
+#   VLLM_GPU_FRAC=0.90 bash scripts/vllm_server.sh
+#
+# ⚠️ RTX 5090(sm_120) 주의: FlashInfer JIT 이 arch 파싱 실패로 죽는다.
+#    vllm_server.sh 가 VLLM_USE_FLASHINFER_SAMPLER=0 으로 우회한다.
+#    이 설정은 샘플링 난수 흐름을 바꾸므로 다른 GPU 와 **같은 시드라도 다른 샘플**이 나온다.
+#    (self-consistency 특성상 정상이며, 점수에는 유의한 차이가 없음을 실측 확인)
+
+vllm==0.28.0
+torch==2.13.0
+transformers==5.16.1
+openai==3.5.0
+numpy==2.3.5

@@ -1,0 +1,34 @@
+{
+  "base_model": "Qwen/Qwen2.5-3B-Instruct",
+  "base_model_path": "/workspace/models/Qwen2.5-3B-Instruct",
+  "dataset": "data/processed/hybrid_3145.jsonl",
+  "dataset_sha256": "dc67ce480d9b2046665818ce5dfcb544394cecd6049aca7db7558e8bf3315c39",
+  "samples": 3145,
+  "global_step": 197,
+  "elapsed_seconds": 477.0094804763794,
+  "max_minutes": 30.0,
+  "max_seq_length": 2048,
+  "learning_rate": 2e-06,
+  "batch_size": 8,
+  "gradient_accumulation": 2,
+  "lora_rank": 8,
+  "target_modules": "qv",
+  "epochs": 1.0,
+  "seed": 2026,
+  "resume_from_checkpoint": null,
+  "metrics": {
+    "train_runtime": 476.7169,
+    "train_samples_per_second": 6.597,
+    "train_steps_per_second": 0.413,
+    "total_flos": 3.278922517118976e+16,
+    "train_loss": 0.9678201875105727,
+    "epoch": 1.0
+  },
+  "versions": {
+    "torch": "2.8.0+cu128",
+    "transformers": "4.57.6",
+    "datasets": "4.8.5",
+    "peft": "0.20.0",
+    "bitsandbytes": "0.50.1"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "inputs": [
+    {
+      "path": "data/processed/hybrid_3145.jsonl",
+      "sha256": "dc67ce480d9b2046665818ce5dfcb544394cecd6049aca7db7558e8bf3315c39",
+      "samples": 3145
+    },
+    {
+      "path": "data/processed/codex_hard_99_sft.jsonl",
+      "sha256": "472c4089d67069d88870ab794db43c56df1bda6aaee62c208eef62efc9778454",
+      "samples": 99
+    }
+  ],
+  "output": "data/processed/hybrid_3244.jsonl",
+  "output_sha256": "d46c6f775ad1ebd206af26a7ae271b486523e5288ae3166513fb83b1c8dc8584",
+  "unique_samples": 3244,
+  "samples": 3244,
+  "duplicates": 0,
+  "teacher_repeats": {},
+  "unique_teacher_counts": {
+    "MATH-lighteval-human": 700,
+    "NuminaMath-1.5-curated": 300,
+    "gpt-5.6-luna": 1906,
+    "gpt-5.4-mini-2026-03-17": 133,
+    "gpt-5.6-luna-high": 82,
+    "codex-gpt-5.6-sol": 99,
+    "gpt-5.4-mini-high": 5,
+    "gpt-5.6-terra": 19
+  },
+  "weighted_teacher_counts": {
+    "MATH-lighteval-human": 700,
+    "NuminaMath-1.5-curated": 300,
+    "gpt-5.6-luna": 1906,
+    "gpt-5.4-mini-2026-03-17": 133,
+    "gpt-5.6-luna-high": 82,
+    "codex-gpt-5.6-sol": 99,
+    "gpt-5.4-mini-high": 5,
+    "gpt-5.6-terra": 19
+  },
+  "max_seq_length": 2048,
+  "minimum_tokens": 91,
+  "average_tokens": 309.89673242909987,
+  "maximum_tokens": 1233
+}

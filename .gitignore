@@ -1,0 +1,90 @@
+__pycache__/
+*.py[cod]
+.venv/
+.env
+.env.*
+.DS_Store
+
+data/*
+!data/.gitkeep
+outputs/*
+!outputs/.gitkeep
+checkpoints/*
+!checkpoints/.gitkeep
+
+# ── 로그: 기본 제외, 핵심 학습 로그만 포함 ──
+logs/*
+!logs/.gitkeep
+!logs/grpo_scaleup_train.log
+logs_sweep_main.log
+
+# ── 검증 제출물 화이트리스트 (compose 재현에 필요한 산출물) ──
+# voter 5종 greedy (831)
+!outputs/hybrid_3145_leaderboard_retry2048.jsonl
+!outputs/hybrid_3244_leaderboard_retry2048.jsonl
+!outputs/external_3000_r8_qv_lr2e6_e1_leaderboard_retry2048.jsonl
+!outputs/hybrid_4145_r8_qv_lr1p5e6_e1_leaderboard_retry2048.jsonl
+!outputs/hybrid_3145_verify_leaderboard_retry2048.jsonl
+# self-consistency N=8 (support tier별)
+!outputs/self_consistency_hybrid3145_n8_leaderboard_support1to3.jsonl
+!outputs/self_consistency_hybrid3145_n8_leaderboard_support4.jsonl
+!outputs/self_consistency_hybrid3145_n8_leaderboard_support5.jsonl
+# TIR 풀 4종 (코드 실행 검증)
+!outputs/tir_sc8_831_vote3_to60.jsonl
+!outputs/tir_repair1_831_gate282.jsonl
+!outputs/tir_nocode_831_gate282.jsonl
+!outputs/tirc_831_vote45.jsonl
+# GRPO ck150 게이트 신호 (N=8 / N=64)
+!outputs/ck150_n8_leaderboard_support1to3.jsonl
+!outputs/ck150_n8_leaderboard_support4.jsonl
+!outputs/ck150_n64_lb_support1to3.jsonl
+!outputs/ck150_n64_lb_support4.jsonl
+
+# ── 최종 모델 체크포인트 (LoRA 어댑터) ──
+!checkpoints/hybrid_3145_r8_qv_lr2e6_e1/
+!checkpoints/hybrid_3145_r8_qv_lr2e6_e1/**
+!checkpoints/hybrid_3244_r8_qv_lr2e6_e1/
+!checkpoints/hybrid_3244_r8_qv_lr2e6_e1/**
+!checkpoints/external_3000_r8_qv_lr2e6_e1/
+!checkpoints/external_3000_r8_qv_lr2e6_e1/**
+!checkpoints/hybrid_4145_r8_qv_lr1p5e6_e1/
+!checkpoints/hybrid_4145_r8_qv_lr1p5e6_e1/**
+!checkpoints/grpo_3145_scaleup_r8_qv_lr2e6_steps800_g8/
+!checkpoints/grpo_3145_scaleup_r8_qv_lr2e6_steps800_g8/README.md
+!checkpoints/grpo_3145_scaleup_r8_qv_lr2e6_steps800_g8/checkpoint-150/
+!checkpoints/grpo_3145_scaleup_r8_qv_lr2e6_steps800_g8/checkpoint-150/**
+
+# ── 학습 데이터 (최종 SFT 4종 + GRPO 풀, manifest 포함) ──
+!data/processed/
+!data/processed/hybrid_3145.jsonl
+!data/processed/hybrid_3145.manifest.json
+!data/processed/hybrid_3244.jsonl
+!data/processed/hybrid_3244.manifest.json
+!data/processed/hybrid_4145.jsonl
+!data/processed/hybrid_4145.manifest.json
+!data/processed/grpo_passrate_scaleup.jsonl
+!data/processed/grpo_passrate_scaleup.manifest.json
+!data/external/
+!data/external/external_math_3000.jsonl
+!data/external/external_math_3000.manifest.json
+
+# ── 위 화이트리스트의 계층 보정 (디렉터리 재포함 시 하위 전체가 딸려오는 것 방지) ──
+data/processed/*
+!data/processed/hybrid_3145.jsonl
+!data/processed/hybrid_3145.manifest.json
+!data/processed/hybrid_3244.jsonl
+!data/processed/hybrid_3244.manifest.json
+!data/processed/hybrid_4145.jsonl
+!data/processed/hybrid_4145.manifest.json
+!data/processed/grpo_passrate_scaleup.jsonl
+!data/processed/grpo_passrate_scaleup.manifest.json
+data/external/*
+!data/external/external_math_3000.jsonl
+!data/external/external_math_3000.manifest.json
+# GRPO: 채택된 checkpoint-150 만, optimizer 상태 제외
+checkpoints/grpo_3145_scaleup_r8_qv_lr2e6_steps800_g8/*
+!checkpoints/grpo_3145_scaleup_r8_qv_lr2e6_steps800_g8/README.md
+!checkpoints/grpo_3145_scaleup_r8_qv_lr2e6_steps800_g8/checkpoint-150/
+!checkpoints/grpo_3145_scaleup_r8_qv_lr2e6_steps800_g8/checkpoint-150/**
+checkpoints/grpo_3145_scaleup_r8_qv_lr2e6_steps800_g8/checkpoint-150/optimizer.pt
+checkpoints/grpo_3145_scaleup_r8_qv_lr2e6_steps800_g8/checkpoint-150/rng_state.pth

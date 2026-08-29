@@ -1,0 +1,100 @@
+{
+  "output": "data/external/external_math_3000.jsonl",
+  "output_sha256": "7ddd5a6a0a717a807baf71b22095c61076ff96552ee418b94740a4e1dd36fac6",
+  "samples": 3000,
+  "seed": 2026,
+  "selection": "lowest sha256(seed:namespace:question) within fixed quotas",
+  "official_decontamination": {
+    "train_questions": 17000,
+    "leaderboard_questions": 831,
+    "method": "normalized exact plus token-Jaccard/SequenceMatcher near duplicate"
+  },
+  "excluded_training_data": {
+    "paths": [
+      "data/processed/hybrid_3244.jsonl"
+    ],
+    "rows": 3244,
+    "unique_normalized_questions": 3244
+  },
+  "datasets": [
+    {
+      "id": "openai/gsm8k",
+      "revision": "740312a",
+      "license": "MIT",
+      "config": "main",
+      "split": "train",
+      "selected": 300
+    },
+    {
+      "id": "DigitalLearningGmbH/MATH-lighteval",
+      "revision": "92ace7ed9c5f22d9148ea70c403948eae7bed2e8",
+      "license": "MIT",
+      "split": "train",
+      "selected": 1200
+    },
+    {
+      "id": "AI-MO/NuminaMath-1.5",
+      "revision": "1b05109f9e5c1ad06c0663519502416c30b300f8",
+      "license": "Apache-2.0",
+      "split": "train",
+      "selected": 1500
+    }
+  ],
+  "math_level_quotas": {
+    "Level 3": 257,
+    "Level 4": 472,
+    "Level 5": 471
+  },
+  "math_type_counts": {
+    "Algebra": 283,
+    "Counting & Probability": 129,
+    "Geometry": 147,
+    "Intermediate Algebra": 200,
+    "Number Theory": 202,
+    "Prealgebra": 180,
+    "Precalculus": 59
+  },
+  "numina_source_quotas": {
+    "olympiads": 600,
+    "aops_forum": 450,
+    "cn_contest": 300,
+    "amc_aime": 100,
+    "olympiads_ref": 50
+  },
+  "numina_profile": "broad_hard",
+  "numina_problem_type_counts": {
+    "Algebra": 405,
+    "Calculus": 9,
+    "Combinatorics": 318,
+    "Geometry": 288,
+    "Inequalities": 25,
+    "Logic and Puzzles": 90,
+    "Number Theory": 354,
+    "Other": 11
+  },
+  "rejections": {
+    "external_duplicate": 2381,
+    "math_level": 1914,
+    "math_non_integer_answer": 2082,
+    "numina_invalid": 48153,
+    "numina_non_integer_answer": 93872,
+    "numina_not_word_problem": 113845,
+    "official_exact": 5860,
+    "official_near_sequence": 650,
+    "official_near_token": 833,
+    "sequence_too_long": 16,
+    "solution_too_long": 3799,
+    "solution_too_short": 3966,
+    "visual_or_url": 2395
+  },
+  "token_limits": {
+    "min_assistant_tokens": 64,
+    "max_assistant_tokens": 900,
+    "max_sequence_tokens": 1536
+  },
+  "selected_sequence_tokens": {
+    "minimum": 136,
+    "average": 466.0973333333333,
+    "maximum": 1439
+  }
+}

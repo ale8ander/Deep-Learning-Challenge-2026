@@ -1,0 +1,30 @@
+# 학습·데이터생성·채점 환경 (시스템 python3)
+#
+# ⚠️ 이 프로젝트는 환경이 **두 개**다. torch 버전이 서로 달라 한 환경에 못 담는다.
+#   - 이 파일        : 학습/평가/제출본 조립  (torch 2.8 + cu128, transformers 4.x)
+#   - requirements-vllm.txt : vLLM 추론 서버   (torch 2.13 + cu130, transformers 5.x)
+# 추론 환경은 별도 venv 로 만든다 — 자세한 건 그 파일 머리말 참고.
+#
+# 검증 환경: Python 3.12.3 / CUDA 12.8 / NVIDIA driver 580.126.20
+# 요건 충족: Python>=3.10, PyTorch>=2.0, CUDA>=12.0
+#
+# 설치:
+#   python3 -m pip install -r requirements.txt
+#   (torch 는 CUDA 빌드가 필요하다:
+#    python3 -m pip install torch==2.8.0 --index-url https://download.pytorch.org/whl/cu128)
+#
+# 버전은 재현성을 위해 **고정**한다. 하한(>=)만 두면 이후 릴리스에서 다른 게 깔려
+# 같은 코드가 다르게 동작할 수 있다.
+
+torch==2.8.0
+transformers==4.57.6
+accelerate==1.14.0
+datasets==4.8.5
+peft==0.20.0
+bitsandbytes==0.50.2
+trl==0.29.1
+tqdm==4.70.0
+pandas==3.0.5
+numpy==2.1.2
+openai==2.54.0
+hf_transfer==0.1.9

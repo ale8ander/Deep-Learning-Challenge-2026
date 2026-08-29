@@ -1,0 +1,20 @@
+{
+  "output": "data/processed/grpo_passrate_scaleup.jsonl",
+  "output_sha256": "00991ce3469c52b9b858e08309836b980920cdec903c31a02882ccaaeba73d65",
+  "screen_input": "outputs/grpo_screen4000_hybrid3145_n8.jsonl",
+  "screened": 4000,
+  "samples": 667,
+  "band": "n_correct 2..6 / 8",
+  "band_histogram": {
+    "0": 733,
+    "1": 230,
+    "2": 152,
+    "3": 132,
+    "4": 150,
+    "5": 195,
+    "6": 251,
+    "7": 418,
+    "8": 1739
+  },
+  "sft_hybrid3145_skipped": 213
+}
