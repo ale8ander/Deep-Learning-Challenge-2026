@@ -27,7 +27,7 @@ OUTPUT_DIR="checkpoints/${EXPERIMENT_NAME}"
 ADAPTER_PATH="${OUTPUT_DIR}/final_adapter"
 EVAL_OUTPUT="outputs/${EXPERIMENT_NAME}_eval200.jsonl"
 LEADERBOARD_OUTPUT="outputs/${EXPERIMENT_NAME}_leaderboard.jsonl"
-SUBMISSION_OUTPUT="submission_${EXPERIMENT_NAME}.csv"
+SUBMISSION_OUTPUT="submissions/submission_${EXPERIMENT_NAME}.csv"
 
 if [[ "${RUN_TRAIN}" == "1" ]]; then
   PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True \

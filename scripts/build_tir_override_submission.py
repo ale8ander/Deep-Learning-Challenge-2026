@@ -20,7 +20,7 @@ from collections import Counter
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-CHAMPION = ROOT / "submission_self_consistency_hybrid3145_n8_min4_support4.csv"
+CHAMPION = ROOT / "submissions/submission_self_consistency_hybrid3145_n8_min4_support4.csv"
 TEST = ROOT / "data/deep_chal_math_leaderboard_filtered.csv"
 TIR_FILES = [
     "outputs/tir_831_vote3_hybrid3145.jsonl",      # 게이트 통과분 전용 실행
@@ -33,11 +33,11 @@ SC_FILES = [
     "outputs/self_consistency_hybrid3145_n8_leaderboard_support5.jsonl",
 ]
 VOTERS = [
-    "submission_hybrid_3145.csv",
-    "submission_hybrid_3244.csv",
-    "submission_external_3000.csv",
-    "submission_hybrid_4145_r8_qv_lr1p5e6_e1_retry2048.csv",
-    "submission_hybrid_3145_verify_retry2048.csv",
+    "submissions/submission_hybrid_3145.csv",
+    "submissions/submission_hybrid_3244.csv",
+    "submissions/submission_external_3000.csv",
+    "submissions/submission_hybrid_4145_r8_qv_lr1p5e6_e1_retry2048.csv",
+    "submissions/submission_hybrid_3145_verify_retry2048.csv",
 ]
 
 

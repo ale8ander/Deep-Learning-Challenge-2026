@@ -7,7 +7,7 @@
 
 사용:
   /usr/bin/python3 scripts/build_ck_gate_submission.py \
-    --output submission_ck150_gate5_sup4_codeguard.csv [--reference <csv> --verify-only]
+    --output submissions/submission_ck150_gate5_sup4_codeguard.csv [--reference <csv> --verify-only]
 """
 import argparse
 import csv
@@ -21,7 +21,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 from extractor_v2 import norm  # noqa: E402
 from tir_common import normalize as tnorm  # noqa: E402
 
-BASE_SUB = "submission_pool24_v3mc2.csv"
+BASE_SUB = "submissions/submission_pool24_v3mc2.csv"
 CK_N8 = ["outputs/ck150_n8_leaderboard_support4.jsonl",
          "outputs/ck150_n8_leaderboard_support1to3.jsonl"]
 TIR_POOLS = ["outputs/tir_sc8_831_vote3_to60.jsonl",

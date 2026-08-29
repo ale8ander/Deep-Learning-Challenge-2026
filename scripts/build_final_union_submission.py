@@ -5,7 +5,7 @@
 
 사용:
   /usr/bin/python3 scripts/build_final_union_submission.py \
-    --output submission_final_gate425.csv [--reference <csv> --verify-only]
+    --output submissions/submission_final_gate425.csv [--reference <csv> --verify-only]
 """
 import argparse
 import csv
@@ -19,7 +19,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 from extractor_v2 import norm  # noqa: E402
 from tir_common import normalize as tnorm  # noqa: E402
 
-BASE_SUB = "submission_ck150_gate5_sup4_codeguard.csv"   # 665 챔피언
+BASE_SUB = "submissions/submission_ck150_gate5_sup4_codeguard.csv"   # 665 챔피언
 CK_N64 = ["outputs/ck150_n64_lb_support4.jsonl",
           "outputs/ck150_n64_lb_support1to3.jsonl"]
 TIR_POOLS = ["outputs/tir_sc8_831_vote3_to60.jsonl",

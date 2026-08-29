@@ -125,27 +125,27 @@ if [ "$MODE" = "compose" ]; then
   $PY scripts/build_merged16_submission.py \
       --vote3-pools "outputs/tir_sc8_831_vote3_to60.jsonl,outputs/tir_repair1_831_gate282.jsonl,outputs/tir_nocode_831_gate282.jsonl" \
       --vote3-min-count 2 \
-      --reference submission_pool24_v3mc2.csv --verify-only \
+      --reference submissions/submission_pool24_v3mc2.csv --verify-only \
       > "$LOGS/compose_pool24.log" 2>&1
   rc=$?
   sed -n '1,8p' "$LOGS/compose_pool24.log"
   [ $rc -eq 0 ] || die "pool24 v3mc2(660) 재현 불일치 ($LOGS/compose_pool24.log)"
 
   # ck 게이트+코드가드본은 산출물이 있을 때만 검증 (제출/채택 여부와 무관하게 재현성 보존)
-  if [ -f "$ROOT/submission_ck150_gate5_sup4_codeguard.csv" ]; then
+  if [ -f "$ROOT/submissions/submission_ck150_gate5_sup4_codeguard.csv" ]; then
     say "[4/4] ck150 게이트+코드가드 재현 검증"
     $PY scripts/build_ck_gate_submission.py --output /dev/null \
-        --reference submission_ck150_gate5_sup4_codeguard.csv --verify-only \
+        --reference submissions/submission_ck150_gate5_sup4_codeguard.csv --verify-only \
         > "$LOGS/compose_ckgate.log" 2>&1
     rc=$?
     sed -n '1,6p' "$LOGS/compose_ckgate.log"
     [ $rc -eq 0 ] || die "ck 게이트본 재현 불일치 ($LOGS/compose_ckgate.log)"
   fi
 
-  if [ -f "$ROOT/submission_final_gate425.csv" ]; then
+  if [ -f "$ROOT/submissions/submission_final_gate425.csv" ]; then
     say "[5/5] 게이트 v3 (N=64, 0.425) 재현 검증"
     $PY scripts/build_final_union_submission.py --output /dev/null \
-        --reference submission_final_gate425.csv --verify-only \
+        --reference submissions/submission_final_gate425.csv --verify-only \
         > "$LOGS/compose_gate425.log" 2>&1
     rc=$?
     tail -2 "$LOGS/compose_gate425.log"
@@ -289,7 +289,7 @@ fi
 
 # ── Stage 4: 병합 -> 최종 제출본 ──────────────────────────────────────────────
 say "=== Stage 4: 병합 -> 최종 제출본 ==="
-OUT_CSV="submission_reproduced.csv"
+OUT_CSV="submissions/submission_reproduced.csv"
 $PY scripts/build_merged16_submission.py \
   --vote3-pools  "$REPRO/tir_poolA_gate282.jsonl,$REPRO/tir_poolB_gate282.jsonl" \
   --vote45-pools "$REPRO/tir_poolA_gate282.jsonl,$REPRO/tir_poolB_gate282.jsonl" \

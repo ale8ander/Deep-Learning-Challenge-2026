@@ -25,7 +25,7 @@ from collections import Counter
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-CHAMPION = ROOT / "submission_self_consistency_hybrid3145_n8_min4_support4.csv"
+CHAMPION = ROOT / "submissions/submission_self_consistency_hybrid3145_n8_min4_support4.csv"
 TEST = ROOT / "data/deep_chal_math_leaderboard_filtered.csv"
 SC_FILES = [
     "outputs/self_consistency_hybrid3145_n8_leaderboard_support1to3.jsonl",

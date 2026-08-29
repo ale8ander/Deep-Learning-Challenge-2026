@@ -122,7 +122,7 @@ data/          학습 데이터(최종 사용분) + manifest (출처·sha256·�
 outputs/       compose 재현에 필요한 추론 산출물 (voter/SC/TIR/게이트 신호)
 scripts/       학습·추론·조립·분석 스크립트 전체 (실패 실험 포함, 과정 투명성)
 logs/          GRPO 학습 로그
-submission_*.csv  전체 제출 이력 (최종본 포함)
+submissions/  전체 제출 이력 (최종본 포함)
 DATA.md        사용 데이터 목록 (필수 제출 항목)
 REPORT.md      실험 보고서 (접근 방법·전략)
 ```

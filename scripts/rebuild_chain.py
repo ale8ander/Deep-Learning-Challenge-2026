@@ -14,7 +14,7 @@
 
 사용:
     python3 scripts/rebuild_chain.py --extractor v1 --verify-only
-    python3 scripts/rebuild_chain.py --extractor v2 --out-prefix submission_v2ext
+    python3 scripts/rebuild_chain.py --extractor v2 --out-prefix submissions/submission_v2ext
 """
 import argparse
 import csv
@@ -47,10 +47,10 @@ TIR_VOTE3 = "outputs/tir_sc8_831_vote3_to60.jsonl"
 TIR_VOTE45 = "outputs/tirc_831_vote45.jsonl"
 
 REFERENCE = {
-    "5voter": "submission_ensemble_5voter_3145_3244_external_4145_verify.csv",
-    "champion": "submission_self_consistency_hybrid3145_n8_min4_support4.csv",
-    "tir_sc8": "submission_tir_sc8_vote3_mc2.csv",
-    "tir_sc8_v45": "submission_tir_sc8_vote3_plus_vote45mc4.csv",
+    "5voter": "submissions/submission_ensemble_5voter_3145_3244_external_4145_verify.csv",
+    "champion": "submissions/submission_self_consistency_hybrid3145_n8_min4_support4.csv",
+    "tir_sc8": "submissions/submission_tir_sc8_vote3_mc2.csv",
+    "tir_sc8_v45": "submissions/submission_tir_sc8_vote3_plus_vote45mc4.csv",
 }
 
 

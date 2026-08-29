@@ -14,7 +14,7 @@ CONTEXT.md K절의 규칙을 코드로 고정한 것이다. 이 규칙은 지금
 
 사용:
     python3 scripts/build_merged16_submission.py --verify-only
-    python3 scripts/build_merged16_submission.py --out submission_x.csv
+    python3 scripts/build_merged16_submission.py --out submissions/submission_x.csv
 """
 import argparse
 import csv
@@ -35,7 +35,7 @@ POOL_A100_VOTE45 = "outputs/tirc_831_vote45.jsonl"
 # 5090 pod 산출물 (게이트 282문제 = 표수<=3 173 + 표수4~5 109 를 한 파일에 담는다)
 POOL_NC_GATE282 = "outputs/tir_nocode_831_gate282.jsonl"
 
-REFERENCE = "submission_nocode_merged16.csv"
+REFERENCE = "submissions/submission_nocode_merged16.csv"
 
 
 def load_counts(rel):

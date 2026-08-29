@@ -17,7 +17,7 @@ VRAM=$(nvidia-smi --query-gpu=memory.total --format=csv,noheader,nounits | head 
 say "=== 2) 볼륨 보존 확인 ==="
 for p in /workspace/models/Qwen2.5-3B-Instruct /workspace/venv-vllm/bin/python \
          $R/checkpoints/hybrid_3145_r8_qv_lr2e6_e1/final_adapter \
-         $R/submission_pool24_v3mc2.csv $R/data/processed/r1_distill_3k.jsonl \
+         $R/submissions/submission_pool24_v3mc2.csv $R/data/processed/r1_distill_3k.jsonl \
          $R/data/processed/distill_target_pool.jsonl; do
   [ -e "$p" ] && echo "  OK   $p" || echo "  !! 없음 $p"
 done
@@ -53,6 +53,6 @@ say "=== 6) 진행 중이던 작업 상태 ==="
 [ -f "$R/checkpoints/r1_distill_r8qv_lr1e5/final_adapter/adapter_config.json" ] \
   && echo "  R1 증류 어댑터: 있음(학습 완료됨)" \
   || echo "  R1 증류 어댑터: 없음 → 재학습 필요"
-echo "  확보된 제출본: $(ls $R/submission_pool24_v3mc2.csv 2>/dev/null && echo '' || echo '없음')"
+echo "  확보된 제출본: $(ls $R/submissions/submission_pool24_v3mc2.csv 2>/dev/null && echo '' || echo '없음')"
 
 say "=== 부트스트랩 완료 ==="

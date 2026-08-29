@@ -12,10 +12,10 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parent.parent
-BASE = ROOT / "submission_nocode_merged16.csv"
-BEFORE_MC4 = ROOT / "submission_tir_sc8_vote3_mc2.csv"
-AFTER_MC4 = ROOT / "submission_tir_sc8_vote3_plus_vote45mc4.csv"
-OUTPUT = ROOT / "submission_nocode_merged16_restore_nonrisky_mc4.csv"
+BASE = ROOT / "submissions/submission_nocode_merged16.csv"
+BEFORE_MC4 = ROOT / "submissions/submission_tir_sc8_vote3_mc2.csv"
+AFTER_MC4 = ROOT / "submissions/submission_tir_sc8_vote3_plus_vote45mc4.csv"
+OUTPUT = ROOT / "submissions/submission_nocode_merged16_restore_nonrisky_mc4.csv"
 SUMMARY = ROOT / "outputs/submission_nocode_merged16_restore_nonrisky_mc4_summary.json"
 
 TARGET_IDS = {

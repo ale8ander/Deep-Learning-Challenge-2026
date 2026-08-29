@@ -5,7 +5,7 @@
 사용:
 /usr/bin/python3 scripts/build_sc_swap_submission.py \
   --ck-n8 outputs/ck150_n8_leaderboard_support4.jsonl \
-  --output submission_sc_swap_ck150.csv
+  --output submissions/submission_sc_swap_ck150.csv
 """
 import argparse
 import csv
@@ -19,7 +19,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 from extractor_v2 import extract_v2, norm  # noqa: E402
 
 SUPPORT4 = "outputs/self_consistency_hybrid3145_n8_leaderboard_support4.jsonl"
-BASE_SUB = "submission_pool24_v3mc2.csv"
+BASE_SUB = "submissions/submission_pool24_v3mc2.csv"
 
 
 def jl(rel):
