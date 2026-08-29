@@ -25,6 +25,9 @@ ADAPTERS=(
   "h4145=checkpoints/hybrid_4145_r8_qv_lr1p5e6_e1/final_adapter"
   "teacher=checkpoints/teacher32b_r8qv_lr2e6/final_adapter"
   "ck150=checkpoints/grpo_3145_scaleup_r8_qv_lr2e6_steps800_g8/checkpoint-150"
+  "m5050=checkpoints/merge_h3145_ck150_5050"
+  "m3070=checkpoints/merge_h3145_ck150_3070"
+  "m7030=checkpoints/merge_h3145_ck150_7030"
 )
 LORA_ARGS=()
 for a in "${ADAPTERS[@]}"; do
@@ -53,8 +56,8 @@ exec env PATH=/workspace/venv-vllm/bin:$PATH PYTHONUNBUFFERED=1 \
   --max-model-len "${MAXLEN:-8192}" \
   --gpu-memory-utilization "${FRAC}" \
   --enable-lora \
-  --max-lora-rank 8 \
-  --max-loras 8 \
+  --max-lora-rank 16 \
+  --max-loras 11 \
   --lora-modules "${LORA_ARGS[@]}" \
   --port "${PORT}" \
   --no-enable-log-requests

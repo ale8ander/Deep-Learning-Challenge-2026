@@ -99,6 +99,8 @@ def main():
     ap.add_argument("--request-workers", type=int, default=32)
     ap.add_argument("--seed", type=int, default=20260828)
     ap.add_argument("--limit", type=int, default=None)
+    ap.add_argument("--exemplars", default=None,
+                    help="few-shot 예시 json ([{user, assistant}]) — system 뒤에 대화 턴으로 삽입")
     ap.add_argument("--dump-trajectories", type=Path, default=None,
                     help="샘플별 전체 궤적(1라운드 텍스트/최종 코드/stdout/최종답 텍스트)을 "
                          "jsonl 로 남긴다. TIR 자기증류 SFT 수확용 — 기본 출력은 예측/상태만 "
@@ -154,7 +156,12 @@ def main():
     def generate_pool(rows_subset, n, seed):
         """문제별 n샘플 생성 -> 리페어 -> 최종답. (sample_pred, execution) 리스트를 문제별로 돌려준다."""
         sys_prompt = TIR_SYMPY_SYSTEM if args.system_style == "sympy" else TIR_SYSTEM
-        base = [[{"role": "system", "content": sys_prompt},
+        shot_turns = []
+        if args.exemplars:
+            for s in json.load(open(args.exemplars)):
+                shot_turns += [{"role": "user", "content": s["user"]},
+                               {"role": "assistant", "content": s["assistant"]}]
+        base = [[{"role": "system", "content": sys_prompt}, *shot_turns,
                  {"role": "user", "content": r["question"]}] for r in rows_subset]
         with ThreadPoolExecutor(max_workers=args.request_workers) as pool:
             per_row = list(pool.map(lambda c: chat(c, args.max_new_tokens, n, seed), base))
