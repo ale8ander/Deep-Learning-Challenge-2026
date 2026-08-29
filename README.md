@@ -120,7 +120,7 @@ python3 -m venv /workspace/venv-vllm && /workspace/venv-vllm/bin/pip install -r 
 checkpoints/   최종 LoRA 어댑터 5종 (+ training_metadata.json)
 data/          학습 데이터(최종 사용분) + manifest (출처·sha256·오염 제거 기록)
 outputs/       compose 재현에 필요한 추론 산출물 (voter/SC/TIR/게이트 신호)
-scripts/       학습·추론·조립·분석 스크립트 전체 (실패 실험 포함, 과정 투명성)
+scripts/       학습·추론·조립 핵심 스크립트 33종 (실패 실험 스크립트는 git 이력에 보존)
 logs/          GRPO 학습 로그
 submissions/  전체 제출 이력 (최종본 포함)
 DATA.md        사용 데이터 목록 (필수 제출 항목)
