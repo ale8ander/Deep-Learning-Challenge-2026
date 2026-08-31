@@ -38,7 +38,8 @@ tir(){ # out input seed nocode
   [ -s "$O/$1" ] && { say "$1 있음 — 건너뜀"; return; }
   $V scripts/tir_repair_client.py --input $2 --output $O/$1 \
     --model "${TIR_MODEL:-hybrid3145}" --num-samples 8 --repair-rounds 1 --nocode-retries $4 \
-    --exec-timeout 60 --exec-workers 64 --request-workers 64 --seed $3 2>&1 | tail -1
+    --exec-timeout 60 --exec-workers "${TIR_EXEC_WORKERS:-64}" \
+    --request-workers "${TIR_REQ_WORKERS:-64}" --seed $3 2>&1 | tail -1
 }
 tir tir_a100_vote3.jsonl $O/mega_vote3.csv 20260931 0
 tir tir_r1_vote3.jsonl   $O/mega_vote3.csv 20260932 0
@@ -78,4 +79,4 @@ if [ ! -s "$O/ck150_n8lp.jsonl" ]; then
   $V scripts/gen_n8_logprobs.py --input $IN --output $O/ck150_n8lp.jsonl \
     --model ck150 --seed 20260924 --request-workers 48 2>&1 | tail -1
 fi
-say "=== 생성 전체 완료 — 채점: scripts/mega_score.py ==="
+say "=== 생성 전체 완료 — 조립/채점: scripts/compose_final_submissions.py ==="

@@ -104,17 +104,5 @@ checkpoints/grpo_3145_scaleup_r8_qv_lr2e6_steps800_g8/checkpoint-150/rng_state.p
 # ── 제출 CSV 는 저장소에 두지 않는다 (주최측 직접 전달, compose 가 sha256 검증으로 재생성) ──
 submissions/
 
-# ── 세션 운영/기각 실험 스크립트 (저장소 미포함) ──
-scripts/train_fullft.py
-scripts/build_numina100k.py
-scripts/build_r1_distill_sft.py
-scripts/gen_battery_client.py
-scripts/run_prompt_battery.sh
-scripts/battery_ensemble_search.py
-scripts/voter_swap_chain_judge.py
-scripts/chain_final_then_mega.sh
-scripts/launch_final_pipeline.sh
-scripts/launch_mega_first.sh
-scripts/mega_until_final.sh
-scripts/grpo2_eval_watcher.sh
-scripts/grpo2b_eval_watcher.sh
+# ── 세션 운영/기각 실험 파일 보관소 (저장소 미포함) ──
+attic/
