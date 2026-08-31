@@ -24,7 +24,7 @@ run_voter h4145      h4145      default
 run_voter verify     hybrid3145 verify
 
 say "=== 2) hybrid SC N=8 (응답 포함) ==="
-if [ ! -s "$O/sc_hybrid_n8.jsonl" ] || [ "$(wc -l < $O/sc_hybrid_n8.jsonl)" -lt 2000 ]; then
+if [ ! -s "$O/sc_hybrid_n8.jsonl" ] || [ "$(wc -l < $O/sc_hybrid_n8.jsonl)" -lt "$(($(wc -l < "$IN") - 1))" ]; then
   $V scripts/screen_grpo_passrate.py --input $IN --output $O/sc_hybrid_n8.jsonl \
     --model hybrid3145 --num-samples 8 --temperature 0.7 --top-p 0.95 \
     --max-new-tokens 1024 --request-workers 64 --seed 20260828 --resume --save-responses 2>&1 | tail -1
