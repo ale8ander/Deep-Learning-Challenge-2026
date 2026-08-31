@@ -5,6 +5,8 @@
 # 추론(생성)은 전부 이 환경에서, 학습·조립은 시스템 python3 에서 돈다.
 #
 # 검증 환경: Python 3.12.3 / CUDA 13.0 / NVIDIA driver 580.126.20
+# 최종 추론 환경: RTX PRO 6000 Blackwell 96GB / NVIDIA driver 595.91.07
+# 요건 충족: Python>=3.10, PyTorch>=2.0 (2.13.0), CUDA>=12.0 (13.0)
 #
 # 설치:
 #   python3 -m venv /workspace/venv-vllm
