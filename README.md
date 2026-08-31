@@ -113,8 +113,8 @@ venv 를 저 경로에 만들어 두기만 하면 됩니다. 다만 `run_inferen
 제출본 재현 검증(`compose`)만 할 때는 시스템 쪽만 있으면 됩니다 (GPU 도 불필요).
 
 ```bash
-# 1) 저장소를 /workspace/DLC 에 클론 (스크립트들이 이 절대 경로를 사용)
-git clone <repo-url> /workspace/DLC && cd /workspace/DLC
+# 1) 저장소 클론 (스크립트들이 자기 위치에서 저장소 루트를 찾으므로 어디에 클론해도 된다)
+git clone <repo-url> ~/Deep-Learning-Challenge-2026 && cd ~/Deep-Learning-Challenge-2026
 
 # 2) 베이스 모델 배치 (HF Qwen/Qwen2.5-3B-Instruct, 저장소 미포함)
 hf download Qwen/Qwen2.5-3B-Instruct --local-dir /workspace/models/Qwen2.5-3B-Instruct
@@ -136,8 +136,9 @@ bash scripts/vllm_server.sh &
 
 # 2) 추론: 모델이 문제를 푸는 단계 (GPU, 2~4시간).
 # 체인 1~5단계가 쓸 샘플을 전부 생성: voter 5종 → SC N=8 → TIR → 게이트 재료
-MEGA_IN=data/deep_chal_math_dataset_test.csv MEGA_OUT=outputs/final SKIP_N64=1 \
-  bash scripts/run_inference.sh
+# 입력/출력 기본값이 data/deep_chal_math_dataset_test.csv → outputs/final 이므로
+# 그대로 실행하면 된다 (다른 입력은 MEGA_IN/MEGA_OUT 환경변수로 재지정)
+SKIP_N64=1 bash scripts/run_inference.sh
 
 # 3) 제출 CSV 조립: 공식 test 는 answer 값이 비어 있어 조립만 한다
 # (answer 가 채워진 검증셋을 넣으면 층별 채점표도 함께 출력)

@@ -8,7 +8,7 @@
 # GPU 메모리: 0.45로 잡아 학습(batch 8 기준 ~20GB)과 공존할 수 있게 한다.
 # 서버만 쓸 때 더 큰 KV 캐시가 필요하면 VLLM_GPU_FRAC=0.85 로 올린다.
 set -u
-cd /workspace/DLC
+cd "$(dirname "$0")/.."
 mkdir -p logs
 
 PORT=${VLLM_PORT:-8000}
@@ -16,18 +16,14 @@ FRAC=${VLLM_GPU_FRAC:-0.45}
 
 # LoRA 어댑터를 이름으로 등록해두면 요청마다 model= 로 골라 쓸 수 있다.
 # 같은 서버에서 여러 계보를 비교할 수 있다는 뜻이다.
+# run_inference.sh 가 쓰는 5종 전부를 등록해야 한다 (voter: hybrid3145/h3244/ext3000/h4145,
+# 게이트: ck150). verify voter 는 hybrid3145 가중치에 프롬프트만 다르다.
 ADAPTERS=(
   "hybrid3145=checkpoints/hybrid_3145_r8_qv_lr2e6_e1/final_adapter"
-  "tirsft=checkpoints/numina_tir3000_r8_qv_lr2e6_e1/final_adapter"
-  "grpo96=checkpoints/grpo_3145_passrate94_r8_qv_lr1e6_steps96_g8/final_adapter"
-  "verbose=checkpoints/verbose_distill_r8_qv_lr2e6_e1/final_adapter"
-  "tirexec=checkpoints/numina_tirexec_r8_qv_lr2e6_e1/final_adapter"
+  "h3244=checkpoints/hybrid_3244_r8_qv_lr2e6_e1/final_adapter"
+  "ext3000=checkpoints/external_3000_r8_qv_lr2e6_e1/final_adapter"
   "h4145=checkpoints/hybrid_4145_r8_qv_lr1p5e6_e1/final_adapter"
-  "teacher=checkpoints/teacher32b_r8qv_lr2e6/final_adapter"
   "ck150=checkpoints/grpo_3145_scaleup_r8_qv_lr2e6_steps800_g8/checkpoint-150"
-  "m5050=checkpoints/merge_h3145_ck150_5050"
-  "m3070=checkpoints/merge_h3145_ck150_3070"
-  "m7030=checkpoints/merge_h3145_ck150_7030"
 )
 LORA_ARGS=()
 for a in "${ADAPTERS[@]}"; do

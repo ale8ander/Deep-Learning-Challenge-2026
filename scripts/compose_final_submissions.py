@@ -4,13 +4,12 @@ mega_score.py 의 체인 로직에 672 층(few-shot 포인터 게이트)을 추�
 입력·산출 디렉터리를 인자로 받는다. 입력 CSV 에 answer 열이 있으면(=메가)
 후보별 점수도 채점한다. 없으면(=최종 테스트) CSV 조립만 한다.
 
-  # 메가 채점 (672 포함)
-  python3 scripts/compose_final_submissions.py --input data/holdout/mega_holdout_2000.csv \
-      --materials outputs/mega
-  # 최종 테스트 제출본
-  python3 scripts/compose_final_submissions.py --input data/final_test.csv \
+  # 최종 테스트 제출본 (재료는 run_inference.sh 가 outputs/final 에 생성)
+  python3 scripts/compose_final_submissions.py \
+      --input data/deep_chal_math_dataset_test.csv \
       --materials outputs/final --emit c672=submissions/final_c672.csv \
       --emit c623=submissions/final_c623.csv
+  # answer 열이 채워진 검증셋을 넣으면 후보별 채점표도 출력한다
 """
 import argparse
 import csv
@@ -19,7 +18,7 @@ import sys
 from collections import Counter
 from pathlib import Path
 
-ROOT = Path("/workspace/DLC")
+ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 from extractor_v2 import extract_v2, norm  # noqa: E402
 from tir_common import normalize as tnorm  # noqa: E402

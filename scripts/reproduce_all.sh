@@ -24,8 +24,8 @@
 # 재개 안전: 각 단계는 산출물이 이미 있으면 건너뛴다. 다시 만들려면 파일을 지운다.
 set -uo pipefail
 
-cd /workspace/DLC
-ROOT=/workspace/DLC
+ROOT=$(cd "$(dirname "$0")/.." && pwd)
+cd "$ROOT"
 PY=python3
 VPY=/workspace/venv-vllm/bin/python          # vLLM 클라이언트 전용 venv
 TEST=data/deep_chal_math_leaderboard_filtered.csv
@@ -58,6 +58,8 @@ skip_stage() { [ "$(stage_idx "$1")" -lt "$FROM_IDX" ]; }
 say "=== Stage 0: 사전 점검 ==="
 
 # 주최측 재현 환경 요건: Python>=3.10, PyTorch>=2.0, CUDA>=12.0
+# torch/CUDA/베이스 모델은 생성(full)에만 필요하다 — compose 는 표준 라이브러리만 쓴다.
+if [ "$MODE" = "full" ]; then
 $PY - <<'PYEOF' || die "환경 요건 미달"
 import sys
 ok = True
@@ -83,6 +85,9 @@ except ImportError:
     print("  PyTorch 없음  ✗"); ok = False
 sys.exit(0 if ok else 1)
 PYEOF
+else
+  $PY -c 'import sys; sys.exit(0 if sys.version_info >= (3, 10) else 1)' || die "Python>=3.10 필요"
+fi
 
 [ -f "$TEST" ] || die "리더보드 입력 없음: $TEST"
 # 문제 본문에 줄바꿈이 들어 있어 wc -l 은 과다 계수한다. csv 로 세야 한다.
@@ -97,8 +102,12 @@ ADAPTERS=(
 for a in "${ADAPTERS[@]}"; do
   p="${a#*:}"; [ -d "$ROOT/$p" ] || die "어댑터 없음: $p"
 done
-[ -d /workspace/models/Qwen2.5-3B-Instruct ] || die "베이스 모델 없음 (규칙상 Qwen2.5-3B-Instruct 고정)"
-say "어댑터 4종 + 베이스 모델 확인"
+if [ "$MODE" = "full" ]; then
+  [ -d /workspace/models/Qwen2.5-3B-Instruct ] || die "베이스 모델 없음 (규칙상 Qwen2.5-3B-Instruct 고정)"
+  say "어댑터 4종 + 베이스 모델 확인"
+else
+  say "어댑터 4종 확인 (베이스 모델은 compose 에 불필요)"
+fi
 
 if [ "$MODE" = "compose" ]; then
   # ───────────────────────────────────────────────────────────────────────────

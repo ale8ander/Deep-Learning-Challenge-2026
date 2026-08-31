@@ -4,9 +4,9 @@
 # /workspace 는 볼륨이라 보존된다 — 모델·체크포인트·venv-vllm·데이터·스크립트 전부 살아있다.
 # 날아가는 건 **시스템 python3 패키지뿐**이다(학습용 torch/transformers/peft...).
 #
-# 사용: bash /workspace/DLC/scripts/bootstrap_pod.sh
+# 사용: bash scripts/bootstrap_pod.sh
 set -u
-R=/workspace/DLC
+R=$(cd "$(dirname "$0")/.." && pwd)
 say(){ echo "[$(TZ=Asia/Seoul date +%H:%M:%S)] $*"; }
 
 say "=== 1) 하드웨어 ==="

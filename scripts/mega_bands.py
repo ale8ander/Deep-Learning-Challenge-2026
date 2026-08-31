@@ -1,4 +1,4 @@
-"""메가 홀드아웃 밴드 산출 — SC 표수, 5-voter support, risky → 하위 CSV 3종."""
+"""문항 밴드 산출 — SC 표수, 5-voter support, risky → 하위 CSV 3종 + mega_bands.json."""
 import csv
 import json
 import re
@@ -6,13 +6,13 @@ import sys
 from collections import Counter
 from pathlib import Path
 
-ROOT = Path("/workspace/DLC")
+ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 from extractor_v2 import extract_v2, norm  # noqa: E402
 
 import os
-O = Path(os.environ.get("MEGA_OUT", str(ROOT / "outputs/mega")))
-IN = Path(os.environ.get("MEGA_IN", str(ROOT / "data/holdout/mega_holdout_2000.csv")))
+O = Path(os.environ.get("MEGA_OUT", str(ROOT / "outputs/final")))
+IN = Path(os.environ.get("MEGA_IN", str(ROOT / "data/deep_chal_math_dataset_test.csv")))
 if not O.is_absolute():
     O = ROOT / O
 if not IN.is_absolute():
