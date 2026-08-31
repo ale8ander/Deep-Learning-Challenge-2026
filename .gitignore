@@ -106,3 +106,4 @@ submissions/
 
 # ── 세션 운영/기각 실험 파일 보관소 (저장소 미포함) ──
 attic/
+.venv-data/
