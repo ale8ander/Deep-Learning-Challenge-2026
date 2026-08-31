@@ -10,25 +10,63 @@ Public 리더보드 **0.80866 (672/831)** 를 기록한 제출물입니다.
 ## 파이프라인
 
 ```mermaid
-flowchart TD
-    subgraph 학습["학습 (베이스: Qwen2.5-3B-Instruct 고정)"]
-        D1["SFT 데이터 4종<br/>hybrid_3145 / 3244 / 4145 / external_3000"] --> T1["LoRA SFT (r8, q/v)<br/>train_qlora.py"]
-        T1 --> A1["어댑터 4종"]
-        D2["GRPO 풀 667문제<br/>(pass-rate 2~6/8 대역)"] --> T2["GRPO (RLVR)<br/>train_grpo_qlora.py"]
-        A1 -->|hybrid_3145 에서 이어 학습| T2
-        T2 --> A2["ck150 어댑터<br/>(checkpoint-150)"]
+flowchart TB
+    subgraph 학습["🎓 학습 — 베이스: Qwen2.5-3B-Instruct 고정"]
+        direction LR
+        D1["📚 SFT 데이터 4종<br/>hybrid_3145 · 3244 · 4145<br/>external_3000"]
+        D2["🎯 GRPO 풀 667문제<br/>pass-rate 2~6/8 대역"]
+        T1["LoRA SFT<br/>r8 · q/v<br/><i>train_qlora.py</i>"]
+        T2["GRPO (RLVR)<br/>보상 = 정답 exact match<br/><i>train_grpo_qlora.py</i>"]
+        A1["🧩 어댑터 4종<br/>+ verify 프롬프트 voter"]
+        A2["🏆 ck150 어댑터<br/>checkpoint-150"]
+        D1 --> T1 --> A1
+        D2 --> T2
+        A1 -.hybrid_3145 에서 이어 학습.-> T2 --> A2
     end
 
-    subgraph 추론["추론 체인 (전부 로컬 vLLM/HF, 외부 API 없음)"]
-        L1["L1 · 5-voter 다수결<br/>어댑터 4종 greedy + verify 프롬프트"] --> L2["L2 · support≤4 문항<br/>self-consistency N=8 교체<br/><b>Public 623</b>"]
-        L2 --> L3["L3 · 표 갈림 문항 TIR 교체<br/>모델 작성 파이썬 로컬 실행·검증<br/><b>Public 656→660</b>"]
-        L3 --> L4["L4 · ck150 삼중 게이트<br/>팀 약함 × N=8 확신 ≥5표 × 코드가드<br/><b>Public 665</b>"]
-        L4 --> L5["L5 · few-shot 포인터 게이트<br/>3-shot greedy 포인터 × 2계보 16샘플<br/>상대다수 × 자기재현 ≥2표<br/><b>Public 672 (최종)</b>"]
+    subgraph 추론["⚡ 추론 체인 — 전부 로컬 vLLM/HF, 외부 API 없음"]
+        direction TB
+        L1["<b>L1 · 5-voter 다수결</b><br/>어댑터 4종 greedy + verify 프롬프트"]
+        L2["<b>L2 · Self-Consistency</b><br/>support≤4 문항만 N=8 다수결 교체"]
+        L3["<b>L3 · TIR 코드 검증</b><br/>표 갈림 문항 → 모델이 쓴 파이썬을<br/>로컬 실행, 검증된 답의 다수결"]
+        L4["<b>L4 · ck150 삼중 게이트</b><br/>팀 약함 × N=8 확신 ≥5표 × 코드가드"]
+        L5["<b>L5 · few-shot 포인터 게이트</b><br/>3-shot 포인터 × 2계보 16샘플<br/>상대다수 × 자기재현 ≥2표"]
+        S2(["Public 623"])
+        S3(["Public 656 → 660"])
+        S4(["Public 665"])
+        S5(["Public 672 ★ 최종"])
+        L1 --> L2 --- S2
+        L2 --> L3 --- S3
+        L3 --> L4 --- S4
+        L4 --> L5 --- S5
     end
 
-    A1 --> L1
-    A2 --> L4
-    L5 --> CSV["제출 CSV (id, answer)"]
+    A1 ==> L1
+    A2 ==> L4
+    A2 ==> L5
+    L5 ==> CSV["📄 제출 CSV<br/>id, answer"]
+
+    classDef data fill:#dbeafe,stroke:#3b82f6,color:#1e3a5f
+    classDef train fill:#ede9fe,stroke:#8b5cf6,color:#3b2a6e
+    classDef adapter fill:#dcfce7,stroke:#22c55e,color:#14532d
+    classDef l1 fill:#fefce8,stroke:#eab308,color:#713f12
+    classDef l2 fill:#fef9c3,stroke:#eab308,color:#713f12
+    classDef l3 fill:#fde68a,stroke:#f59e0b,color:#78350f
+    classDef l4 fill:#fdba74,stroke:#f97316,color:#7c2d12
+    classDef l5 fill:#f97316,stroke:#c2410c,color:#ffffff
+    classDef score fill:#f1f5f9,stroke:#94a3b8,color:#334155
+    classDef final fill:#fee2e2,stroke:#ef4444,color:#7f1d1d
+
+    class D1,D2 data
+    class T1,T2 train
+    class A1,A2 adapter
+    class L1 l1
+    class L2 l2
+    class L3 l3
+    class L4 l4
+    class L5 l5
+    class S2,S3,S4 score
+    class S5,CSV final
 ```
 
 - **L1**: 데이터를 달리해 학습한 어댑터 4종의 greedy + hybrid_3145 에 자기검증
