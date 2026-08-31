@@ -88,3 +88,33 @@ checkpoints/grpo_3145_scaleup_r8_qv_lr2e6_steps800_g8/*
 !checkpoints/grpo_3145_scaleup_r8_qv_lr2e6_steps800_g8/checkpoint-150/**
 checkpoints/grpo_3145_scaleup_r8_qv_lr2e6_steps800_g8/checkpoint-150/optimizer.pt
 checkpoints/grpo_3145_scaleup_r8_qv_lr2e6_steps800_g8/checkpoint-150/rng_state.pth
+
+# ── 대회 공식 데이터 (제출 요건: train/test CSV 동봉) + compose 가 읽는 831 문제 목록 ──
+!data/deep_chal_math_dataset_train.csv
+!data/deep_chal_math_dataset_test.csv
+!data/deep_chal_math_leaderboard_filtered.csv
+
+# ── 672(최종 제출) 조립 재료: few-shot 포인터 + 2계보 N=8 풀 ──
+!outputs/fewshot_exemplars3.json
+!outputs/fewshot3_h3145_831_greedy.jsonl
+!outputs/fewshot3_h3145_n8_831_seed20260925.jsonl
+!outputs/ck150_n8lp_831_seed20260924.jsonl
+!outputs/h3145_n8lp_831_seed20260924.jsonl
+
+# ── 제출 CSV 는 저장소에 두지 않는다 (주최측 직접 전달, compose 가 sha256 검증으로 재생성) ──
+submissions/
+
+# ── 세션 운영/기각 실험 스크립트 (저장소 미포함) ──
+scripts/train_fullft.py
+scripts/build_numina100k.py
+scripts/build_r1_distill_sft.py
+scripts/gen_battery_client.py
+scripts/run_prompt_battery.sh
+scripts/battery_ensemble_search.py
+scripts/voter_swap_chain_judge.py
+scripts/chain_final_then_mega.sh
+scripts/launch_final_pipeline.sh
+scripts/launch_mega_first.sh
+scripts/mega_until_final.sh
+scripts/grpo2_eval_watcher.sh
+scripts/grpo2b_eval_watcher.sh

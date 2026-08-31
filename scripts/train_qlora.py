@@ -131,7 +131,10 @@ def main() -> None:
             add_generation_prompt=False,
         )
         if len(full_ids) > args.max_seq_length:
-            raise ValueError(f"Prepared sample exceeds max length: {len(full_ids)}")
+            # 초과 샘플은 버린다 (라벨 전부 -100 → 학습 기여 0인 1토큰 더미로 치환).
+            # 기존 데이터(전부 상한 이내 검증됨)에는 영향 없음 — R1 장문셋 대응용.
+            return {"input_ids": [tokenizer.eos_token_id],
+                    "attention_mask": [1], "labels": [-100]}
 
         labels = [-100] * len(full_ids)
         trained = 0
@@ -163,6 +166,12 @@ def main() -> None:
         desc="tokenize SFT data",
         num_proc=4,
     )
+    _before = len(tokenized)
+    tokenized = tokenized.filter(
+        lambda r: any(l != -100 for l in r["labels"]), num_proc=4,
+        desc="drop overlength")
+    if _before != len(tokenized):
+        print(f"길이 초과로 제외: {_before - len(tokenized)} / {_before}")
 
     quantization = BitsAndBytesConfig(
         load_in_4bit=True,

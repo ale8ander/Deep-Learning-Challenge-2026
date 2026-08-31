@@ -102,57 +102,66 @@ say "어댑터 4종 + 베이스 모델 확인"
 
 if [ "$MODE" = "compose" ]; then
   # ───────────────────────────────────────────────────────────────────────────
-  # compose — 기존 산출물에서 제출본을 조립하고 참조 CSV 와 대조한다.
+  # compose — 저장소 산출물(outputs/*.jsonl)에서 제출본 전 단계를 순차 재생성하고,
+  # 각 CSV 를 제출 당시 현물의 고정 sha256 과 대조한다 (바이트 단위 재현 증명).
+  # 제출 CSV 자체는 저장소에 없다(주최측 직접 전달) — 이 절차가 그 대체 증거다.
+  # 단계 의존: [1] 체인 4종 -> [2] 656 -> [3] 660 -> [4] 665 -> [5] 664 / [6] 672
+  # ([4]~[6] 은 앞 단계가 만든 CSV 를 BASE_SUB 으로 읽는다)
   # ───────────────────────────────────────────────────────────────────────────
-  say "=== compose: 기존 산출물 -> 제출본 (결정론적) ==="
+  say "=== compose: 산출물 -> 제출본 재생성 + sha256 자가검증 ==="
+  mkdir -p submissions
 
-  say "[1/2] 챔피언 체인 재현 검증 (5-voter -> support4 SC -> TIR 게이트)"
-  $PY scripts/rebuild_chain.py --extractor v1 --verify-only \
-      > "$LOGS/compose_chain.log" 2>&1 || die "rebuild_chain 실패 ($LOGS/compose_chain.log)"
-  # 표 머리글에도 '불일치' 라는 낱말이 있다. 실제 실패는 '<수>개 불일치' 형태다.
-  grep -qE "[0-9]+개 불일치" "$LOGS/compose_chain.log" && {
-      grep -nE "[0-9]+개 불일치" "$LOGS/compose_chain.log"; die "체인 재현 불일치"; }
-  sed -n '1,12p' "$LOGS/compose_chain.log"
+  check() { # $1=기대 sha256  $2=경로
+    local got; got=$(sha256sum "$2" | cut -d' ' -f1)
+    [ "$got" = "$1" ] || die "sha256 불일치: $2 (기대 ${1:0:12}…, 실제 ${got:0:12}…)"
+    say "  OK $2 (${got:0:12}…)"
+  }
 
-  say "[2/4] merged16(656) 재현 검증"
-  $PY scripts/build_merged16_submission.py --verify-only \
-      > "$LOGS/compose_merged16.log" 2>&1
-  rc=$?
-  sed -n '1,12p' "$LOGS/compose_merged16.log"
-  [ $rc -eq 0 ] || die "merged16 재현 불일치 ($LOGS/compose_merged16.log)"
+  say "[1/6] 챔피언 체인 4종 재생성 (5-voter -> support4 SC -> TIR)"
+  $PY scripts/rebuild_chain.py --extractor v1 --out-prefix submissions/rebuild \
+      > "$LOGS/compose_chain.log" 2>&1 || { tail -5 "$LOGS/compose_chain.log"; die "rebuild_chain 실패"; }
+  mv submissions/rebuild_5voter.csv      submissions/submission_ensemble_5voter_3145_3244_external_4145_verify.csv
+  mv submissions/rebuild_champion.csv    submissions/submission_self_consistency_hybrid3145_n8_min4_support4.csv
+  mv submissions/rebuild_tir_sc8.csv     submissions/submission_tir_sc8_vote3_mc2.csv
+  mv submissions/rebuild_tir_sc8_v45.csv submissions/submission_tir_sc8_vote3_plus_vote45mc4.csv
+  check d5bcf8b6553b5e320b57601b0f8e781e6085bc59e3c0a1c490a456749f096e97 submissions/submission_ensemble_5voter_3145_3244_external_4145_verify.csv
+  check a1c43a20d604511ae30407dffcb6f325c56ba58bdc9545d1d09048a4b06d9daf submissions/submission_self_consistency_hybrid3145_n8_min4_support4.csv
+  check e0ae63c3d67edc2e05b1cf80e5ae720a6d33ba74c595fb9c5f35b747ceff21e1 submissions/submission_tir_sc8_vote3_mc2.csv
+  check 1053d7fd6a6883f9777ddad066cbcac4bbce70e7d5f1493903443997ac329731 submissions/submission_tir_sc8_vote3_plus_vote45mc4.csv
 
-  say "[3/4] pool24 v3mc2(660, 현행 챔피언) 재현 검증"
-  $PY scripts/build_merged16_submission.py \
+  say "[2/6] merged16 (Public 656) 재생성"
+  $PY scripts/build_merged16_submission.py --no-reference \
+      --out submissions/submission_nocode_merged16.csv \
+      > "$LOGS/compose_merged16.log" 2>&1 || { tail -5 "$LOGS/compose_merged16.log"; die "merged16 실패"; }
+  check 79d895865e517aedd5c893add01af0a56a6f7a83c1a76c19a27f20ccbce0ab3e submissions/submission_nocode_merged16.csv
+
+  say "[3/6] pool24 v3mc2 (Public 660) 재생성"
+  $PY scripts/build_merged16_submission.py --no-reference \
       --vote3-pools "outputs/tir_sc8_831_vote3_to60.jsonl,outputs/tir_repair1_831_gate282.jsonl,outputs/tir_nocode_831_gate282.jsonl" \
       --vote3-min-count 2 \
-      --reference submissions/submission_pool24_v3mc2.csv --verify-only \
-      > "$LOGS/compose_pool24.log" 2>&1
-  rc=$?
-  sed -n '1,8p' "$LOGS/compose_pool24.log"
-  [ $rc -eq 0 ] || die "pool24 v3mc2(660) 재현 불일치 ($LOGS/compose_pool24.log)"
+      --out submissions/submission_pool24_v3mc2.csv \
+      > "$LOGS/compose_pool24.log" 2>&1 || { tail -5 "$LOGS/compose_pool24.log"; die "pool24 실패"; }
+  check f8a5d38f9cf1b9fa78feae9040022073bc0be748e3177db17ffafd2a5db5ddc9 submissions/submission_pool24_v3mc2.csv
 
-  # ck 게이트+코드가드본은 산출물이 있을 때만 검증 (제출/채택 여부와 무관하게 재현성 보존)
-  if [ -f "$ROOT/submissions/submission_ck150_gate5_sup4_codeguard.csv" ]; then
-    say "[4/4] ck150 게이트+코드가드 재현 검증"
-    $PY scripts/build_ck_gate_submission.py --output /dev/null \
-        --reference submissions/submission_ck150_gate5_sup4_codeguard.csv --verify-only \
-        > "$LOGS/compose_ckgate.log" 2>&1
-    rc=$?
-    sed -n '1,6p' "$LOGS/compose_ckgate.log"
-    [ $rc -eq 0 ] || die "ck 게이트본 재현 불일치 ($LOGS/compose_ckgate.log)"
-  fi
+  say "[4/6] ck150 삼중 게이트+코드가드 (Public 665) 재생성"
+  $PY scripts/build_ck_gate_submission.py \
+      --output submissions/submission_ck150_gate5_sup4_codeguard.csv \
+      > "$LOGS/compose_ckgate.log" 2>&1 || { tail -5 "$LOGS/compose_ckgate.log"; die "ck 게이트 실패"; }
+  check b0665b561ee0e1491b51f84a68bb357c60398b84c22a379033e899fe8ff86ca5 submissions/submission_ck150_gate5_sup4_codeguard.csv
 
-  if [ -f "$ROOT/submissions/submission_final_gate425.csv" ]; then
-    say "[5/5] 게이트 v3 (N=64, 0.425) 재현 검증"
-    $PY scripts/build_final_union_submission.py --output /dev/null \
-        --reference submissions/submission_final_gate425.csv --verify-only \
-        > "$LOGS/compose_gate425.log" 2>&1
-    rc=$?
-    tail -2 "$LOGS/compose_gate425.log"
-    [ $rc -eq 0 ] || die "게이트 v3 재현 불일치 ($LOGS/compose_gate425.log)"
-  fi
+  say "[5/6] 게이트 v3 N=64 (Public 664, 미채택 확장 계열) 재생성"
+  $PY scripts/build_final_union_submission.py \
+      --output submissions/submission_final_gate425.csv \
+      > "$LOGS/compose_gate425.log" 2>&1 || { tail -5 "$LOGS/compose_gate425.log"; die "게이트 v3 실패"; }
+  check 8dd60bacb74b61f1c78a8f2cf4e2e73ff526051090fdd57935ca1cd5aa34ef7f submissions/submission_final_gate425.csv
 
-  say "=== compose 통과: 제출본이 규칙대로 조립됨을 확인 ==="
+  say "[6/6] few-shot 포인터 게이트 (Public 672, 최종 제출) 재생성"
+  $PY scripts/build_fewshot_gate_submission.py \
+      --output submissions/submission_fewshot_gate_v4rel_fs8x2.csv \
+      > "$LOGS/compose_fsgate.log" 2>&1 || { tail -5 "$LOGS/compose_fsgate.log"; die "fs 게이트 실패"; }
+  check bd87a159be33cee59f85c00cf9b3da8cdc2d6f2cc552e5b5eec847297a3f0500 submissions/submission_fewshot_gate_v4rel_fs8x2.csv
+
+  say "=== compose 통과: 623 -> 656 -> 660 -> 665 -> 664/672 전부 바이트 일치 재현 ==="
   exit 0
 fi
 

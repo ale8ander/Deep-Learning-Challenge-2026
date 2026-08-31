@@ -234,6 +234,11 @@ def main():
 
     print(f"{'단계':<14} {'참조 CSV 대비 불일치':>20}")
     for name, ref in REFERENCE.items():
+        # 참조 CSV 는 저장소에 없다 (제출본은 주최측 직접 전달). 로컬에 있을 때만 대조하고,
+        # 없으면 reproduce_all.sh compose 가 --out-prefix 출력의 sha256 으로 검증한다.
+        if not (ROOT / ref).exists():
+            print(f"{name:<14} {'참조 없음(생략)':>20}   ({ref})")
+            continue
         refmap = load_csv(ROOT / ref)
         diff = [i for i in test_ids if stages[name][i] != refmap[i]]
         mark = "일치" if not diff else f"{len(diff)}개 불일치"

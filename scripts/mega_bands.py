@@ -10,8 +10,13 @@ ROOT = Path("/workspace/DLC")
 sys.path.insert(0, str(ROOT / "scripts"))
 from extractor_v2 import extract_v2, norm  # noqa: E402
 
-O = ROOT / "outputs/mega"
-IN = ROOT / "data/holdout/mega_holdout_2000.csv"
+import os
+O = Path(os.environ.get("MEGA_OUT", str(ROOT / "outputs/mega")))
+IN = Path(os.environ.get("MEGA_IN", str(ROOT / "data/holdout/mega_holdout_2000.csv")))
+if not O.is_absolute():
+    O = ROOT / O
+if not IN.is_absolute():
+    IN = ROOT / IN
 
 INT_TAIL = re.compile(r"(?:final answer\s*(?:is|:|=)?\s*\$?\\?\(?\s*-?\d|\\boxed\s*\{\s*-?\d)", re.I)
 
@@ -54,7 +59,8 @@ def write(path, subset):
         w = csv.DictWriter(f, fieldnames=["id", "question", "answer"])
         w.writeheader()
         for i in subset:
-            w.writerow({"id": i, "question": q[i]["question"], "answer": q[i]["answer"]})
+            w.writerow({"id": i, "question": q[i]["question"],
+                        "answer": q[i].get("answer", "")})  # 최종 테스트엔 answer 없음
 
 
 v3 = [i for i in ids if votes[i] <= 3]
