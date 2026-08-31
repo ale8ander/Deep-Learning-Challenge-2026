@@ -31,20 +31,13 @@ flowchart TB
         L3["<b>L3 · TIR 코드 검증</b><br/>표 갈림 문항 → 모델이 쓴 파이썬을<br/>로컬 실행, 검증된 답의 다수결"]
         L4["<b>L4 · ck150 삼중 게이트</b><br/>팀 약함 × N=8 확신 ≥5표 × 코드가드"]
         L5["<b>L5 · few-shot 포인터 게이트</b><br/>3-shot 포인터 × 2계보 16샘플<br/>상대다수 × 자기재현 ≥2표"]
-        S2(["Public 623"])
-        S3(["Public 656 → 660"])
-        S4(["Public 665"])
-        S5(["Public 672 ★ 최종"])
-        L1 --> L2 --- S2
-        L2 --> L3 --- S3
-        L3 --> L4 --- S4
-        L4 --> L5 --- S5
+        L1 --> L2 --> L3 --> L4 --> L5
     end
 
     A1 ==> L1
     A2 ==> L4
     A2 ==> L5
-    L5 ==> CSV["📄 제출 CSV<br/>id, answer"]
+    L5 ==> CSV["📄 제출 CSV — id, answer<br/><b>Public 672/831 (0.80866)</b>"]
 
     classDef data fill:#dbeafe,stroke:#3b82f6,color:#1e3a5f
     classDef train fill:#ede9fe,stroke:#8b5cf6,color:#3b2a6e
@@ -54,7 +47,6 @@ flowchart TB
     classDef l3 fill:#fde68a,stroke:#f59e0b,color:#78350f
     classDef l4 fill:#fdba74,stroke:#f97316,color:#7c2d12
     classDef l5 fill:#f97316,stroke:#c2410c,color:#ffffff
-    classDef score fill:#f1f5f9,stroke:#94a3b8,color:#334155
     classDef final fill:#fee2e2,stroke:#ef4444,color:#7f1d1d
 
     class D1,D2 data
@@ -65,8 +57,7 @@ flowchart TB
     class L3 l3
     class L4 l4
     class L5 l5
-    class S2,S3,S4 score
-    class S5,CSV final
+    class CSV final
 ```
 
 - **L1**: 데이터를 달리해 학습한 어댑터 4종의 greedy + hybrid_3145 에 자기검증
